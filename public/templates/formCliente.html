@@ -1,0 +1,140 @@
+<div class="row">
+  <!-- left column -->
+  <div class="col-md-8">
+    <!-- general form elements -->
+    <div class="box box-warning">
+      <div class="box-header with-border">
+        <h3 class="box-title">Clientes <% cliente.pf.dataNascimento%></h3>
+      </div>
+
+      <!-- /.box-header -->
+      <!-- form start -->
+      <form role="form" name="formCliente" id="formCliente" ng-submit="salvar()">
+        <div class="box-body">
+          <div class="form-group"
+            ng-class="{'has-error' : formCliente.cpfCNPJ.$invalid && formCliente.cpfCNPJ.$touched}">
+            <label>CPF/CNPJ</label>
+            <input type="text" class="form-control" name="cpfCNPJ" placeholder="CPF/CNPJ" ng-model="cliente.cpfCNPJ"
+              ng-required="true" ui-br-cpfcnpj-mask>
+            <span class="help-block" ng-if="formCliente.cpfCNPJ.$invalid && formCliente.cpfCNPJ.$touched" ng-messages="formCliente.cpfCNPJ.$error">
+              <div ng-message="required">O campo é Requerido</div>
+              <div ng-message="cpf">Digite um CPF válido</div>
+              <div ng-message="cnpj">Digite um CNPJ válido</div>
+            </span>
+          </div>
+
+          <div class="form-group" ng-class="{'has-error' : formCliente.nome.$invalid && formCliente.nome.$touched}">
+            <label ng-if="!(cliente.cpfCNPJ.length == 14)">Nome</label>
+            <label ng-if="cliente.cpfCNPJ.length == 14">Nome Fantasia</label>
+            <input type="text" name="nome" class="form-control" ng-required="true" ng-model="cliente.nome"
+              placeholder="Nome">
+            <span class="help-block" ng-if="formCliente.nome.$invalid && formCliente.nome.$touched" ng-messages="formCliente.nome.$error">
+              <div ng-message="required">O campo é Requerido</div>
+            
+            </span>
+          </div>
+          <div class="form-group"
+            ng-class="{'has-error' : formCliente.razaoSocial.$invalid && formCliente.razaoSocial.$touched}"
+            ng-if="cliente.cpfCNPJ.length == 14">
+            <label>Razão Social</label>
+            <input type="text" name="razaoSocial" class="form-control" ng-required="cliente.cpfCNPJ.length == 14"
+              ng-model="cliente.pj.razaoSocial" placeholder="Razão Social">
+            <span class="help-block" ng-if="formCliente.razaoSocial.$invalid && formCliente.razaoSocial.$touched" ng-messages="formCliente.razaoSocial.$error">
+              <div ng-message="required">O campo é Requerido</div>
+            </span>
+          </div>
+          <div class="form-group"
+            ng-class="{'has-error' : formCliente.sobrenome.$invalid && formCliente.sobrenome.$touched}"
+            ng-if="!(cliente.cpfCNPJ.length == 14)">
+            <label>Sobrenome</label>
+            <input type="text" name="sobrenome" class="form-control" ng-required="!(cliente.cpfCNPJ.length == 14)"
+              maxlength="15" ng-model="cliente.pf.sobrenome" placeholder="Sobrenome">
+            <span class="help-block" ng-if="formCliente.sobrenome.$invalid && formCliente.sobrenome.$touched" ng-messages="formCliente.sobrenome.$error">
+              <div ng-message="required">O campo é Requerido</div>
+            </span>
+          </div>
+          <div class="form-group"
+            ng-class="{'has-error' : formCliente.dataNascimento.$invalid && formCliente.dataNascimento.$touched}"
+            ng-if="!(cliente.cpfCNPJ.length == 14)">
+            <label>Data de Nascimento</label>
+            <input type="date" class="form-control" name="dataNascimento" max="<%minDataNascimento%>"
+              ng-required="!(cliente.cpfCNPJ.length == 14)" ng-model="cliente.pf.dataNascimento"
+              placeholder="__/__/____">
+            <span class="help-block" ng-if="formCliente.dataNascimento.$invalid && formCliente.dataNascimento.$touched"  ng-messages="formCliente.dataNascimento.$error">
+                <div ng-message="required">O campo é Requerido</div>
+                <div ng-message="max">A idade mínima é 19 anos</div>
+            </span>
+          </div>
+
+          <div class="form-group" ng-class="{'has-error' : formCliente.cep.$invalid && formCliente.cep.$touched}">
+            <label>CEP</label>
+            <input type="text" name="cep" class="form-control" ng-required="true" ng-model="cliente.cep"
+              ng-change="getCEP()" placeholder="_____-___" ui-br-cep-mask>
+            <span class="help-block" ng-if="formCliente.cep.$invalid && formCliente.cep.$touched" ng-messages="formCliente.cep.$error">
+                <div ng-message="required">O campo é Requerido</div>
+
+            </span>
+          </div>
+
+          <div class="form-group"
+            ng-class="{'has-error' : formCliente.logradouro.$invalid && formCliente.logradouro.$touched}">
+            <label>Logradouro</label>
+            <input type="text" name="logradouro" class="form-control" ng-required="true" ng-model="cliente.logradouro"
+              placeholder="Logradouro">
+            <span class="help-block" ng-if="formCliente.logradouro.$invalid && formCliente.logradouro.$touched" ng-messages="formCliente.logradouro.$error">
+              <div ng-message="required">O campo é Requerido</div>
+            </span>
+          </div>
+
+          <div class="form-group" ng-class="{'has-error' : formCliente.numero.$invalid && formCliente.numero.$touched}">
+            <label>Número</label>
+            <input type="text" class="form-control" ng-required="true" name="numero" ng-model="cliente.numero"
+              ui-number-mask="0" ui-hide-group-sep placeholder="Número">
+            <span class="help-block" ng-if="formCliente.numero.$invalid && formCliente.numero.$touched" ng-messages="formCliente.numero.$error">
+              <div ng-message="required">O campo é Requerido</div>
+            </span>
+          </div>
+          <div class="form-group">
+            <label>Complemento</label>
+            <input type="text" class="form-control" ng-model="cliente.complemento" placeholder="Complemento">
+          </div>
+          <div class="form-group" ng-class="{'has-error' : formCliente.bairro.$invalid && formCliente.bairro.$touched}">
+            <label>Bairro</label>
+            <input type="text" class="form-control" name="bairro" ng-required="true" ng-model="cliente.bairro"
+              placeholder="Bairro">
+            <span class="help-block" ng-messages="formCliente.bairro.$error" ng-if="formCliente.bairro.$invalid && formCliente.bairro.$touched">
+              <div ng-message="required">O campo é Requerido</div>
+            </span>
+          </div>
+          <div class="form-group" ng-class="{'has-error' : formCliente.cidade.$invalid && formCliente.cidade.$touched}">
+            <label>Cidade</label>
+            <input type="text" class="form-control" ng-required="true" name="cidade" ng-model="cliente.cidade"
+              placeholder="Cidade">
+            <span class="help-block" ng-if="formCliente.cidade.$invalid && formCliente.cidade.$touched" ng-messages="formCliente.cidade.$error">
+              <div ng-message="required">O campo é Requerido</div>
+            </span>
+          </div>
+          <div class="form-group" ng-class="{'has-error' : formCliente.uf.$invalid && formCliente.uf.$touched}">
+            <label>UF</label>
+            <input type="text" class="form-control" name="uf" maxlength="8" ng-required="true" ng-model="cliente.uf"
+              placeholder="UF">
+            <span class="help-block" ng-if="formCliente.uf.$invalid && formCliente.uf.$touched" ng-messages="formCliente.uf.$error">
+              <div ng-message="required">O campo é Requerido</div>
+            </span>
+          </div>
+        </div>
+        <!-- /.box-body -->
+
+        <div class="box-footer">
+          <button type="submit" ng-disabled="formCliente.$invalid" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+    <!-- /.box -->
+
+
+
+
+  </div>
+
+</div>
